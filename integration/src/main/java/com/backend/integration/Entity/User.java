@@ -84,12 +84,13 @@ public class User implements UserDetails {
     @JsonIgnore
     private VerificationCodeEntity verificationCodeEntity;
 
-    public User(String email, String userName, String password, String firstName, String lastName, Role role) {
+    public User(String email, String userName, String password, String firstName, String lastName, String phoneNumber, Role role) {
         this.email = email;
         this.userName = userName;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
         this.role = role;
         this.isVerified = false; // Newly registered users are not verified by default
     }

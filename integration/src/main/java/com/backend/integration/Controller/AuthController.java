@@ -1,9 +1,9 @@
 package com.backend.integration.Controller;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
@@ -38,7 +38,6 @@ import com.backend.integration.Service.AuthService;
 import com.backend.integration.Service.EmailService;
 import com.backend.integration.Service.TokenProvider;
 
-import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
@@ -77,13 +76,19 @@ public ResponseEntity<JwtDto> signUp(@RequestBody @Valid SignUpDto data) {
         if (userRepo.existsByUserName(data.getUserName())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(null); // Username already exists
         }
-    
-        // System.out.println("Received Role: " + data.getRole());
+
+        // Check if the phone number already exists
+        if (userRepo.existsByPhoneNumber(data.getPhoneNumber())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null); // Phone number already exists
+        }
+
         // Perform user registration and get the user details
         System.out.println("Received user data:");
         System.out.println("Email: " + data.getEmail());
         System.out.println("UserName: " + data.getUserName());
+        System.out.println("PhoneNumber: " + data.getPhoneNumber());
         System.out.println("Role: " + data.getRole());
+        
         String accessToken = service.signUp(data);
 
         // Generate and store the verification code
@@ -123,7 +128,8 @@ public ResponseEntity<JwtDto> signIn(@RequestBody @Valid SignInDto data) {
                 user.getUsername(),
                 user.getFirstName(),
                 user.getLastName(),
-                user.getEmail()
+                user.getEmail(),
+                user.getPhoneNumber()
             );
 
             return ResponseEntity.ok(jwtDto);
@@ -267,6 +273,61 @@ public ResponseEntity<User> updateUser(@PathVariable Long userId, @RequestBody U
       }
   }
 
+// <-----------OLD FORGOT PASSWORD----------->
+//   @PostMapping("/forgot-password")
+//     public ResponseEntity<String> forgotPassword(@RequestParam String email) {
+//         try {
+//             // Check if the email is registered
+//             User isEmailRegistered = userRepo.findByEmail(email);
+
+//             if (isEmailRegistered != null) {
+//                 // Generate and store the verification code for forgot password
+//                 String verificationCode = emailService.generateAndStoreVerificationCode(email);
+
+//                 // Customize the email content or subject if needed
+//                 EmailDetails emailDetails = new EmailDetails();
+//                 emailDetails.setRecipient(email);
+//                 emailDetails.setGeneratedCode(verificationCode);
+//                 emailDetails.setSubject("Forgot Password - Verification Code");
+//                 emailDetails.setContent("Your verification code is: " + verificationCode);
+
+//                 // Send the verification code via email
+//                 emailService.sendSimpleMail(emailDetails);
+
+//                 return ResponseEntity.ok("Verification code sent successfully");
+//             } else {
+//                 // Email is not registered, return an error response
+//                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email is not registered");
+//             }
+//         } catch (Exception e) {
+
+//             e.printStackTrace();
+//             // Handle any exceptions (e.g., email sending failure)
+//             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to send verification code");
+//         }
+//     }
+
+//     @PostMapping("/verify-forgot-password")
+//     public ResponseEntity<String> verifyForgotPassword(@RequestBody EmailDetails details) {
+//     try {
+//         // Extract information from the request
+//         String userEmail = details.getRecipient();
+//         String enteredCode = details.getVerificationCode();
+
+//         // Verify the entered code
+//         boolean verificationResult = emailService.verifyCode(userEmail, enteredCode);
+
+//         if (verificationResult) {
+//             return ResponseEntity.ok("Verification successful");
+//         } else {
+//             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Verification failed");
+//         }
+//     } catch (Exception e) {
+//         e.printStackTrace();
+//         // Handle any exceptions
+//         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error during verification");
+//     }
+// }
 @GetMapping("/checkRegisteredEmail")
 public ResponseEntity<Boolean> checkRegisteredEmail(@RequestParam String email) {
     try {
@@ -286,7 +347,7 @@ public ResponseEntity<Boolean> checkRegisteredEmail(@RequestParam String email) 
 // <-----------UPLOAD PROFILE PICTURE ENDPOINT----------->
 @PostMapping("/upload-pp")
 public ResponseEntity<String> uploadProfilePicture(@RequestParam("userId") Long userId,
-                                                  @RequestParam("file") MultipartFile file) throws java.io.IOException {
+                                                  @RequestParam("file") MultipartFile file) {
     try {
         // Check if the file size exceeds the allowed limit (e.g., 5 MB)
         long maxFileSize = 2 * 1024 * 1024; // 2 MB in bytes
