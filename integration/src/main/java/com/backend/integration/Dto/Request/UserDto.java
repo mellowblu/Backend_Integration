@@ -5,6 +5,15 @@ import javax.validation.constraints.NotEmpty;
 
 import com.backend.integration.Entity.Enums.Role;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserDto {
     private Long user_id;
 
@@ -50,6 +59,14 @@ public class UserDto {
         return username;
     }
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public String setPhoneNumber() {
+        return phoneNumber;
+    }
+    
     public void setUsername(String username) {
         this.username = username;
     }

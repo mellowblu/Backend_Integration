@@ -13,7 +13,7 @@ public record SignUpDto(
         @NotBlank String firstName,
         @NotBlank String lastName,
         @NotBlank String userName,
-        @NotBlank @Pattern(regexp = "\\d{11}") String phoneNumber, // Add phoneNumber field with validation
+        @NotBlank @Pattern(regexp = "09\\d{9}") String phoneNumber,
         Role role
 ) {
     // Add a getter for email
