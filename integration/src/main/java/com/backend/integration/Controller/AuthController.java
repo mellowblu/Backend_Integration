@@ -44,7 +44,6 @@ import jakarta.servlet.http.HttpServletRequest;
 @RequestMapping("/api/v1/auth")
 public class AuthController {
 
-    @SuppressWarnings("unused")
     @Autowired
     private AuthenticationManager authenticationManager;
 
