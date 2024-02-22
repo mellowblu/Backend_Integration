@@ -43,7 +43,7 @@ public class CourseController {
     }
 
     // API FOR GETTING COURSE BY ID
-    @GetMapping("/{course_id}") // Endpoint for getting a course by its ID
+    @GetMapping("/course/{course_id}") // Endpoint for getting a course by its ID
     Course getCourseById(@PathVariable Long course_id) { // Retrieves course by its ID
         return courseService.getCourseById(course_id);
     }
@@ -55,19 +55,19 @@ public class CourseController {
     }
 
     // API FOR UPDATING COURSE BY ID
-    @PutMapping("/{course_id}") // Endpoint for updating a course by its ID
+    @PutMapping("/course/{course_id}") // Endpoint for updating a course by its ID
     Course updateCourse(@RequestBody Course newCourse, @PathVariable Long course_id) { // Updates course by its ID
         return courseService.updateCourse(newCourse, course_id);
     }
 
     // API FOR DELETING COURSE BY ID
-    @DeleteMapping("/{course_id}") // Endpoint for deleting a course by its ID
+    @DeleteMapping("/course/{course_id}") // Endpoint for deleting a course by its ID
     public String deleteCourse(@PathVariable Long course_id) { // Method signature to delete a course by its ID
         return courseService.deleteCourse(course_id);
     }
 
     // API FOR ADDING CHAPTER TO COURSE
-    @PostMapping("/{course_id}/chapters") // Endpoint for adding a chapter to a course
+    @PostMapping("/course/{course_id}/chapters") // Endpoint for adding a chapter to a course
     // Adds chapter to course
     public ResponseEntity<Course> addChapterToCourse(@PathVariable Long course_id, @RequestBody Chapter chapter) {
         Course updatedCourse = courseService.addChapterToCourse(course_id, chapter);

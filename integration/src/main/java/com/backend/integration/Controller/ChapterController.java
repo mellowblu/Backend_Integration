@@ -39,19 +39,19 @@ public class ChapterController {
     }
 
     // GET MAPPING FOR GETTING CHAPTERS BY ID
-    @GetMapping("/{chapter_id}")
+    @GetMapping("/chapter/{chapter_id}")
     Chapter getChapterById(@PathVariable Long chapter_id) { // Retrieves chapter by its ID
         return chapterService.getChapterById(chapter_id);
     }
 
     // PUT MAPPING FOR UPDATING CHAPTERS BY ID
-    @PutMapping("/{chapter_id}")
+    @PutMapping("/chapter/{chapter_id}")
     Chapter updateChapter(@RequestBody Chapter newChapter, @PathVariable Long chapter_id) { // Updates chapter by its ID
         return chapterService.updateChapter(newChapter, chapter_id);
     }
 
     // DELETE MAPPING TO UPDATE CHAPTERS BY ID
-    @DeleteMapping("/{chapter_id}")
+    @DeleteMapping("/chapter/{chapter_id}")
     String deleteChapter(@PathVariable Long chapter_id) { // Deletes chapter by its ID
         return chapterService.deleteChapter(chapter_id);
     }
@@ -63,7 +63,7 @@ public class ChapterController {
     }
 
     // POST MAPPING TO ADD TOPIC TO CHAPTER
-    @PostMapping("/{chapter_id}/topics")
+    @PostMapping("/chapter/{chapter_id}/topics")
     // adds topic to chapter collection
     public ResponseEntity<Chapter> addTopicToChapter(@PathVariable Long chapter_id, @RequestBody Topic topic) {
         Chapter updatedChapter = chapterService.addTopicToChapter(chapter_id, topic);

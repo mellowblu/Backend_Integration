@@ -72,19 +72,19 @@ public class TopicController {
     }
 
     // Method for retrieving a topic by its ID
-    @GetMapping("/{topic_id}")
+    @GetMapping("/topic/{topic_id}")
     Topic getTopicById(@PathVariable Long topic_id) { // Retrieves topic by its ID
         return topicService.getTopicById(topic_id);
     }
 
     // Method for updating a topic by its ID
-    @PutMapping("/{topic_id}")
+    @PutMapping("/topic/{topic_id}")
     Topic updateTopic(@RequestBody Topic newTopic, @PathVariable Long topic_id) { // Updates topic by its ID
         return topicService.updateTopic(newTopic, topic_id);
     }
 
     // Method for deleting a topic by its ID
-    @DeleteMapping("/{topic_id}")
+    @DeleteMapping("/topic/{topic_id}")
     String deleteTopic(@PathVariable Long topic_id) { // Deletes topic by its ID
         return topicService.deleteTopic(topic_id);
     }
