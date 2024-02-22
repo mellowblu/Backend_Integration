@@ -23,7 +23,7 @@ import com.backend.integration.Service.TopicService;
 
 // Controller class for handling topic-related operations
 @RestController
-@RequestMapping("/api/topics") // Base path for topic related operations
+@RequestMapping("/api/v1/auth") // Base path for topic related operations
 @CrossOrigin("http://localhost:5173") // Allowing requests from this origin
 public class TopicController {
 
@@ -66,7 +66,7 @@ public class TopicController {
     }
 
     // Method for retrieving all topics
-    @GetMapping()
+    @GetMapping("/getTopic")
     List<Topic> getAllTopic() { // Retrieves all topics
         return topicService.getAllTopic();
     }

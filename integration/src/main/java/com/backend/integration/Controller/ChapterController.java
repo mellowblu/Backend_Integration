@@ -19,7 +19,7 @@ import com.backend.integration.Entity.Topic;
 import com.backend.integration.Service.ChapterService;
 
 @RestController // Marks the class as a REST controller
-@RequestMapping("/api/chapters") // Base path for chapter related operations
+@RequestMapping("/api/v1/auth") // Base path for chapter related operations
 @CrossOrigin("http://localhost:5173") // Allowing requests from this origin
 public class ChapterController {
 
@@ -27,13 +27,13 @@ public class ChapterController {
     private ChapterService chapterService;
 
     // POST MAPPING FOR CREATING NEW CHAPTER
-    @PostMapping()
+    @PostMapping("/postChapter")
     public Chapter saveChapter(@RequestBody Chapter newChapter) { // Saves a new chapter
         return chapterService.saveChapter(newChapter);
     }
 
     // GET MAPPING FOR GETTING ALL CHAPTERS
-    @GetMapping()
+    @GetMapping("/getChapter")
     List<Chapter> getAllChapter() { // Retrieves all chapters
         return chapterService.getAllChapter();
     }
