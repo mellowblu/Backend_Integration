@@ -1,23 +1,25 @@
 package com.backend.integration.Entity; // Package declaration
 
-import java.sql.Date; // Import for Date class
-import java.util.List; // Import for using List data structure
 
-import com.fasterxml.jackson.annotation.JsonIgnore; // Import for JSON ignore annotation
+import java.sql.Date;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType; // Importing CascadeType from jakarta.persistence package
-import jakarta.persistence.Entity; // Importing Entity annotation from jakarta.persistence package
-import jakarta.persistence.FetchType; // Importing FetchType from jakarta.persistence package
-import jakarta.persistence.GeneratedValue; // Importing GeneratedValue from jakarta.persistence package
-import jakarta.persistence.GenerationType; // Importing GenerationType from jakarta.persistence package
-import jakarta.persistence.Id; // Importing Id annotation from jakarta.persistence package
-import jakarta.persistence.OneToMany; // Importing OneToMany annotation from jakarta.persistence package
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+// import jakarta.persistence.JoinColumn;
+// import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
-@Entity // Marks the class as an entity
+@Entity
 public class Course {
-
-    @Id // Marks the field as primary key
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Specifies the generation strategy for the primary key
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long course_id; // Unique identifier for the course
 
     private String course_title; // Title of the course
@@ -25,27 +27,39 @@ public class Course {
     private Date course_start_date; // Start date of the course
     private Date course_end_date; // End date of the course
 
-    @JsonIgnore // Ignores serialization and deserialization of this property
-    // Mapping one-to-many relationship with Chapter entity
+
+    //  @JsonIgnore
+    // @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    // @JoinColumn(name = "instructor_id") // Defines the foreign key column in the cOURSE table
+    // private Instructor instructor; // Associated instructor for the course
+
+    // public Instructor getInstructor() {
+    //     return this.instructor;
+    // }
+
+    // public void setInstructor(Instructor instructor) {
+    //     this.instructor = instructor;
+    // }
+
+    // Mapping many-to-one relationship from Chapter
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Chapter> chapter; // List of chapters associated with the course
 
-    public List<Chapter> getChapter() { // Getter method for chapters
+    public List<Chapter> getChapter() {
         return this.chapter;
     }
 
-    public void setChapter(List<Chapter> chapter) { // Setter method for chapters
+    public void setChapter(List<Chapter> chapter) {
         this.chapter = chapter;
     }
 
-    // Method to add a chapter to the course
-    @JsonIgnore // Ignores serialization and deserialization of this method
+    // Used in adding chapter inside course
+    @JsonIgnore
     public void addChapter(Chapter chapter) {
-        chapter.setCourse(this); // Sets the course for the chapter
-        this.getChapter().add(chapter); // Adds the chapter to the collection of chapters
+        chapter.setCourse(this); // Set the course for the chapter
+        this.getChapter().add(chapter); // Add the chapter to the collection of chapters
     }
 
-    // Getter and setter methods for course properties
     public Long getCourse_id() {
         return this.course_id;
     }
@@ -85,4 +99,6 @@ public class Course {
     public void setCourse_end_date(Date course_end_date) {
         this.course_end_date = course_end_date;
     }
+
 }
+
