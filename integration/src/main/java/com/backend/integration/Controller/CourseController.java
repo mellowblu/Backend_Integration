@@ -20,7 +20,7 @@ import com.backend.integration.Repo.CourseRepository;
 import com.backend.integration.Service.CourseService; 
 
 @RestController // Marks the class as a REST controller
-@RequestMapping("/api/courses") // Base path for course related operations
+@RequestMapping("/api/v1/auth") // Base path for course related operations
 @CrossOrigin("http://localhost:5173") // Allowing requests from this origin
 public class CourseController {
 
@@ -31,13 +31,13 @@ public class CourseController {
     CourseRepository courseRepository;
 
     // API FOR CREATE NEW COURSE
-    @PostMapping() // Endpoint for creating a new course
+    @PostMapping("/postCourses") // Endpoint for creating a new course
     Course newCourse(@RequestBody Course newCourse) { // Creates a new course
         return courseService.saveCourse(newCourse);
     }
 
     // API FOR GET ALL COURSES
-    @GetMapping() // Endpoint for getting all courses
+    @GetMapping("/getCourses") // Endpoint for getting all courses
     List<Course> getAllCourse() { // Retrieves all courses
         return courseService.getAllCourse();
     }
