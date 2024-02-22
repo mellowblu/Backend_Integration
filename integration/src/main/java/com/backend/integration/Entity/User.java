@@ -93,6 +93,7 @@ public class User implements UserDetails {
         this.phoneNumber = phoneNumber;
         this.role = role;
         this.isVerified = false; // Newly registered users are not verified by default
+        //add signature data
     }
 
     @Override
