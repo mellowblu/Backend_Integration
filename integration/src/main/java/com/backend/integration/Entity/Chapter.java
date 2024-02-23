@@ -1,5 +1,6 @@
 package com.backend.integration.Entity; // Package declaration
 
+import java.sql.Date;
 import java.util.List; // Import for using List data structure
 
 import com.fasterxml.jackson.annotation.JsonIgnore; // Import for JSON ignore annotation
@@ -22,7 +23,7 @@ public class Chapter {
     private Long chapter_id; // Unique identifier for the chapter
 
     private String chapter_title; // Title of the chapter
-    private String chapter_date_created; // Date when the chapter was created
+    private Date chapter_date_created; // Date when the chapter was created
 
     // MANY TO ONE RELATIONSHIP BETWEEN COURSE AND CHAPTER
     @JsonIgnore // Ignores serialization and deserialization of this property
@@ -74,11 +75,11 @@ public class Chapter {
         this.chapter_title = chapter_title;
     }
     
-    public String getChapter_date_created() {
+    public Date getChapter_date_created() {
         return this.chapter_date_created;
     }
     
-    public void setChapter_date_created(String chapter_date_created) {
+    public void setChapter_date_created(Date chapter_date_created) {
         this.chapter_date_created = chapter_date_created;
     }
 }  

@@ -31,6 +31,7 @@ public class TopicService {
                 .orElseThrow(() -> new TopicNotFoundException(topic_id)); // Handling TopicNotFoundException
     }
 
+    // Function to add a topic 
     public void saveTopicFile(byte[] bytes, String filenameWithoutPrefix) throws IOException {
         // Specify the directory where you want to save the files
         String directoryPath = "C:\\Users\\vsbu\\Documents";
@@ -56,8 +57,8 @@ public class TopicService {
 
     // Function to update a topic
     // Method to update a topic
-    public Topic updateTopic(@RequestBody Topic newTopic, @PathVariable Long topic_id) { 
-                                                                                       
+    public Topic updateTopic(@RequestBody Topic newTopic, @PathVariable Long topic_id) {
+
         return topicRepository.findById(topic_id) // referring to findById() method of TopicRepository interface
                 .map(topic -> { // Using map() to apply changes
                     topic.setTopic_title(newTopic.getTopic_title()); // Updating topic title
@@ -73,7 +74,7 @@ public class TopicService {
         if (!topicRepository.existsById(topic_id)) { // Checking if topic exists
             throw new TopicNotFoundException(topic_id); // Throwing TopicNotFoundException if topic not found
         }
-        topicRepository.deleteById(topic_id); // Deleting topic
+        topicRepository.deleteTopicById(topic_id); // Deleting topic
         return "Topic with id " + topic_id + " has been successfully deleted"; // Returning success message
     }
 

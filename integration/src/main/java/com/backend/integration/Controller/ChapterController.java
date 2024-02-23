@@ -62,7 +62,7 @@ public class ChapterController {
         return chapterService.getChapterByCourseId(course_id);
     }
 
-    // POST MAPPING TO ADD TOPIC TO CHAPTER
+    //  POST MAPPING TO ADD TOPIC TO CHAPTER
     @PostMapping("/chapter/{chapter_id}/topics")
     // adds topic to chapter collection
     public ResponseEntity<Chapter> addTopicToChapter(@PathVariable Long chapter_id, @RequestBody Topic topic) {

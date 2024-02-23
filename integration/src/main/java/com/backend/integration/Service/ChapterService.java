@@ -43,7 +43,7 @@ public class ChapterService {
         if (!chapterRepository.existsById(chapter_id)) { // Checking if chapter exists
             throw new ChapterNotFoundException(chapter_id); // Throwing ChapterNotFoundException if chapter not found
         }
-        chapterRepository.deleteById(chapter_id); // Deleting chapter
+        chapterRepository.deleteChapterById(chapter_id); // Deleting chapter
         return "Chapter with id " + chapter_id + " has been successfully deleted"; // Returning success message
     }
 
