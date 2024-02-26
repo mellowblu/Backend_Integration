@@ -1,4 +1,5 @@
-package com.backend.integration.Entity;
+package com.backend.integration.Entity; // Package declaration
+
 
 import java.sql.Date;
 import java.util.List;
@@ -11,8 +12,6 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
 @Entity
@@ -23,16 +22,21 @@ public class Course {
 
     private String course_title; // Title of the course
     private String course_description; // Description of the course
-    private Date course_start_date; // Start date of the course
-    private Date course_end_date; // End date of the course
+    private Date course_date_created; 
 
 
-    
-     @JsonIgnore
+    //  @JsonIgnore
     // @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     // @JoinColumn(name = "instructor_id") // Defines the foreign key column in the cOURSE table
     // private Instructor instructor; // Associated instructor for the course
 
+    // public Instructor getInstructor() {
+    //     return this.instructor;
+    // }
+
+    // public void setInstructor(Instructor instructor) {
+    //     this.instructor = instructor;
+    // }
 
     // Mapping many-to-one relationship from Chapter
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -46,14 +50,12 @@ public class Course {
         this.chapter = chapter;
     }
 
-    // Used in adding array of chapter inside course
-    // @JsonIgnore
-    // public void addChapter(Chapter chapter) {
-    //     chapter.setCourse(this); // Set the course for the chapter
-    //     this.getChapter().add(chapter); // Add the chapter to the collection of chapters
-    // }
-
-    
+    // Used in adding chapter inside course
+    @JsonIgnore
+    public void addChapter(Chapter chapter) {
+        chapter.setCourse(this); // Set the course for the chapter
+        this.getChapter().add(chapter); // Add the chapter to the collection of chapters
+    }
 
     public Long getCourse_id() {
         return this.course_id;
@@ -78,30 +80,15 @@ public class Course {
     public void setCourse_description(String course_description) {
         this.course_description = course_description;
     }
-
-    public Date getCourse_start_date() {
-        return this.course_start_date;
-    }
-
-    public void setCourse_start_date(Date course_start_date) {
-        this.course_start_date = course_start_date;
-    }
-
-    public Date getCourse_end_date() {
-        return this.course_end_date;
-    }
-
-    public void setCourse_end_date(Date course_end_date) {
-        this.course_end_date = course_end_date;
-    }
-
     
-    // public Instructor getInstructor() {
-    //     return this.instructor;
-    // }
+    public Date getCourse_date_created() {
+        return this.course_date_created;
+    }
 
-    // public void setInstructor(Instructor instructor) {
-    //     this.instructor = instructor;
-    // }
+    public void setCourse_date_created(Date course_date_created) {
+        this.course_date_created = course_date_created;
+    }
+
+
 }
 

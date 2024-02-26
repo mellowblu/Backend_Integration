@@ -1,89 +1,85 @@
-package com.backend.integration.Entity;
+package com.backend.integration.Entity; // Package declaration
 
-import java.util.List;
+import java.sql.Date;
+import java.util.List; // Import for using List data structure
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnore; // Import for JSON ignore annotation
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.CascadeType; // Importing CascadeType from jakarta.persistence package
+import jakarta.persistence.Entity; // Importing Entity annotation from jakarta.persistence package
+import jakarta.persistence.FetchType; // Importing FetchType from jakarta.persistence package
+import jakarta.persistence.GeneratedValue; // Importing GeneratedValue from jakarta.persistence package
+import jakarta.persistence.GenerationType; // Importing GenerationType from jakarta.persistence package
+import jakarta.persistence.Id; // Importing Id annotation from jakarta.persistence package
+import jakarta.persistence.JoinColumn; // Importing JoinColumn from jakarta.persistence package
+import jakarta.persistence.ManyToOne; // Importing ManyToOne annotation from jakarta.persistence package
+import jakarta.persistence.OneToMany; // Importing OneToMany annotation from jakarta.persistence package
 
-@Entity
+@Entity // Marks the class as an entity
 public class Chapter {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id // Marks the field as primary key
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Specifies the generation strategy for the primary key
     private Long chapter_id; // Unique identifier for the chapter
 
     private String chapter_title; // Title of the chapter
-    private String chapter_date_created; // Date when the chapter was created
-
+    private Date chapter_date_created; // Date when the chapter was created
 
     // MANY TO ONE RELATIONSHIP BETWEEN COURSE AND CHAPTER
-    @JsonIgnore
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore // Ignores serialization and deserialization of this property
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY) // Defines a many-to-one relationship
     @JoinColumn(name = "course_id") // Defines the foreign key column in the Chapter table
     private Course course; // Associated course for the chapter
 
-    public Course getCourse() {
-        return this.course; // Getter for course
+    public Course getCourse() { // Getter method for course
+        return this.course;
     }
     
-    public void setCourse(Course course) {
-        this.course = course; // Setter for course
+    public void setCourse(Course course) { // Setter method for course
+        this.course = course;
     }
 
     // JPA relationship one to many between chapter and topic
-    @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL, fetch = FetchType.LAZY) // Defines a one-to-many relationship
     private List<Topic> topic; // List of topics associated with the chapter
 
-    public List<Topic> getTopic() {
-        return this.topic; // Getter for topic
+    public List<Topic> getTopic() { // Getter method for topics
+        return this.topic;
     }
     
-    public void setTopic(List<Topic> topic) {
-        this.topic = topic; // Setter for topic
+    public void setTopic(List<Topic> topic) { // Setter method for topics
+        this.topic = topic;
     }
 
-   
-    // Used in adding topic inside chapter
-    @JsonIgnore
+    // Method to add a topic to the chapter
+    @JsonIgnore // Ignores serialization and deserialization of this method
     public void addTopic(Topic topic) {
-        topic.setChapter(this); // Set the chapter for the topic
-        this.getTopic().add(topic); // Add the topic to the collection of topics
+        topic.setChapter(this); // Sets the chapter for the topic
+        this.getTopic().add(topic); // Adds the topic to the collection of topics
     }
-    // February 13, 2024
 
+    // Getter and setter methods for chapter properties
     public Long getChapter_id() {
-        return this.chapter_id; // Getter for chapter_id
+        return this.chapter_id;
     }
     
     public void setChapter_id(Long chapter_id) {
-        this.chapter_id = chapter_id; // Setter for chapter_id
+        this.chapter_id = chapter_id;
     }
     
     public String getChapter_title() {
-        return this.chapter_title; // Getter for chapter_title
+        return this.chapter_title;
     }
     
     public void setChapter_title(String chapter_title) {
-        this.chapter_title = chapter_title; // Setter for chapter_title
+        this.chapter_title = chapter_title;
     }
     
-    public String getChapter_date_created() {
-        return this.chapter_date_created; // Getter for chapter_date_created
+    public Date getChapter_date_created() {
+        return this.chapter_date_created;
     }
     
-    public void setChapter_date_created(String chapter_date_created) {
-        this.chapter_date_created = chapter_date_created; // Setter for chapter_date_created
+    public void setChapter_date_created(Date chapter_date_created) {
+        this.chapter_date_created = chapter_date_created;
     }
-    
-    
-   
-    
-}
+}  
