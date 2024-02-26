@@ -38,8 +38,7 @@ public class CourseService {
         // Printing course details (except ID)
         System.out.println("Course Title: " + newCourse.getCourse_title());
         System.out.println("Course Description: " + newCourse.getCourse_description());
-        System.out.println("Course Start Date: " + newCourse.getCourse_start_date());
-        System.out.println("Course End Date: " + newCourse.getCourse_end_date());
+        System.out.println("Course Date Created: " + newCourse.getCourse_date_created());
         return courseRepository.save(newCourse); // referring to save() method of CourseRepository interface
     }
 
@@ -69,8 +68,7 @@ public class CourseService {
                 .map(course -> { // Using map() to apply changes
                     course.setCourse_title(newCourse.getCourse_title()); // Updating course title
                     course.setCourse_description(newCourse.getCourse_description()); // Updating course description
-                    course.setCourse_start_date(newCourse.getCourse_start_date()); // Updating course start date
-                    course.setCourse_end_date(newCourse.getCourse_end_date()); // Updating course end date
+                    course.setCourse_date_created(newCourse.getCourse_date_created()); // Updating course start date
                     return courseRepository.save(course); // Saving updated course
                 }).orElseThrow(() -> new CourseNotFoundException(course_id)); // Handling CourseNotFoundException
     }

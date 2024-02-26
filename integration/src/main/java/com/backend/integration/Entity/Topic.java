@@ -18,7 +18,7 @@ public class Topic {
     private Long topic_id; // Unique identifier for the topic
     private String topic_title; // Title of the topic
     private String topic_description; // Description of the topic
-    private byte[] topic_file; // File associated with the topic
+    private String topic_file; // File associated with the topic
     private String topic_link; // Link associated with the topic
 
     // JPA relationship many-to-one between Chapter and Topic
@@ -60,11 +60,11 @@ public class Topic {
         this.topic_description = topic_description;
     }
 
-    public byte[] getTopic_file() {
+    public String getTopic_file() {
         return this.topic_file;
     }
 
-    public void setTopic_file(byte[] topic_file) {
+    public void setTopic_file(String topic_file) {
         this.topic_file = topic_file;
     }
 
