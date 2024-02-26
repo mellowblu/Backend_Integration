@@ -3,7 +3,7 @@ package com.backend.integration.Dto.Request;
 public record JwtDto(
     String accessToken,
     String userId,
-    String username,
+    String userName,
     String firstName,
     String lastName,
     String email,
@@ -17,7 +17,7 @@ public record JwtDto(
         this(accessToken, null, null, null, null, null, null);
     }
     // Example of a with method to create a new instance with additional fields
-    public JwtDto withUserInformation(String userId, String username, String firstName, String lastName, String email, String phoneNumber) {
-        return new JwtDto(this.accessToken(), userId, username, firstName, lastName, email, phoneNumber);
+    public JwtDto withUserInformation(String userId, String userName, String firstName, String lastName, String email, String phoneNumber) {
+        return new JwtDto(this.accessToken(), userId, userName, firstName, lastName, email, phoneNumber);
     }
 }
