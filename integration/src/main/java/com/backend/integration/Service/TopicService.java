@@ -31,28 +31,15 @@ public class TopicService {
                 .orElseThrow(() -> new TopicNotFoundException(topic_id)); // Handling TopicNotFoundException
     }
 
-    // Function to add a topic 
-    public void saveTopicFile(byte[] bytes, String filenameWithoutPrefix) throws IOException {
-        // Specify the directory where you want to save the files
-        String directoryPath = "C:\\Users\\vsbu\\Documents";
 
-        // Create the directory if it doesn't exist
-        File directory = new File(directoryPath);
-        if (!directory.exists()) {
-            directory.mkdirs();
-        }
-
-        // Create a File object with the specified directory and filename
-        File file = new File(directoryPath + filenameWithoutPrefix);
-
-        // Write the byte array to the file
-        try (FileOutputStream fos = new FileOutputStream(file)) {
-            fos.write(bytes);
-        }
-    }
-
-    public void saveTopic(Topic topic) {
-        topicRepository.save(topic);
+    // Function to save a new topic
+    public Topic saveTopic(Topic newTopic) {
+        System.out.println(newTopic.getTopic_id());
+        System.out.println(newTopic.getTopic_title());
+        System.out.println(newTopic.getTopic_description());
+        System.out.println(newTopic.getTopic_file());
+        System.out.println(newTopic.getTopic_link());
+        return topicRepository.save(newTopic);
     }
 
     // Function to update a topic

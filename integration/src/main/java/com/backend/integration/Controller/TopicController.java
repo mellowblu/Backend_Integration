@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody; 
 import org.springframework.web.bind.annotation.RequestMapping; 
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController; 
-import org.springframework.web.multipart.MultipartFile;
 
 import com.backend.integration.Entity.Topic;
 import com.backend.integration.Service.TopicService; 
@@ -31,38 +29,9 @@ public class TopicController {
     private TopicService topicService;
 
     // Method for handling file upload and topic creation
-    @PostMapping("/uploadTopic")
-    public ResponseEntity<String> uploadTopic(@RequestParam("topic_title") String topic_title,
-            @RequestParam("topic_file") MultipartFile topic_file,
-            @RequestParam("topic_description") String topic_description) {
-        if (topic_file.isEmpty()) { // Check if the file is empty
-            return ResponseEntity.badRequest().body("File is empty");
-        }
-
-        try {
-            byte[] bytes = topic_file.getBytes(); // Read file bytes
-            String originalFilename = topic_file.getOriginalFilename(); // Get original filename
-            @SuppressWarnings("null")
-            String filenameWithoutPrefix = originalFilename.startsWith("PPT") ? originalFilename.substring(3)
-                    : originalFilename; // Remove prefix if present
-
-            // Save the file to a directory or cloud storage (you can use a service for
-            // this)
-            topicService.saveTopicFile(bytes, filenameWithoutPrefix);
-
-            // Now, save the topic details to the database
-            Topic topic = new Topic();
-            topic.setTopic_title(topic_title);
-            topic.setTopic_file(bytes);
-            topic.setTopic_description(topic_description);
-
-            topicService.saveTopic(topic); // Save topic to the database
-
-            return ResponseEntity.ok("Topic saved successfully");
-        } catch (IOException e) { // Catch IO exception if file saving fails
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to save topic: " + e.getMessage());
-        }
+    @PostMapping("/createTopic") //orginal user
+        Topic newTopic (@RequestBody Topic newTopic){
+       return topicService.saveTopic(newTopic);
     }
 
     // Method for retrieving all topics
