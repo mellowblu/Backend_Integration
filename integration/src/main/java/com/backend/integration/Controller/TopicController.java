@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController; 
 
 import com.backend.integration.Entity.Topic;
-import com.backend.integration.Service.TopicService; 
+import com.backend.integration.Service.TopicService;
+import org.springframework.web.bind.annotation.RequestParam;
+ 
 
 // Controller class for handling topic-related operations
 @RestController
@@ -57,4 +59,10 @@ public class TopicController {
     String deleteTopic(@PathVariable Long topic_id) { // Deletes topic by its ID
         return topicService.deleteTopic(topic_id);
     }
+
+    @GetMapping("/getTopic/byChapter/{chapter_id}")
+    public List<Topic> getTopicByChapterId(@PathVariable Long chapter_id) { 
+        return topicService.getTopicByChapterId(chapter_id);
+    }
+    
 }
