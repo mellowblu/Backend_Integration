@@ -1,6 +1,5 @@
 package com.backend.integration.Controller;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired; 
 import org.springframework.http.HttpStatus;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.backend.integration.Entity.Chapter; 
 import com.backend.integration.Entity.Course;
-import com.backend.integration.Entity.Enrollment;
 import com.backend.integration.Repo.CourseRepository; 
 import com.backend.integration.Service.CourseService; 
 
@@ -29,87 +27,53 @@ public class CourseController {
     @Autowired // Injection of CourseService dependency
     private CourseService courseService;
 
-      @GetMapping("/courses")
-    public List<Course> getAllCourse() {
+    @Autowired // Injection of CourseRepository dependency
+    CourseRepository courseRepository;
+
+    // API FOR CREATE NEW COURSE
+    @PostMapping("/postCourses") // Endpoint for creating a new course
+    Course newCourse(@RequestBody Course newCourse) { // Creates a new course
+        return courseService.saveCourse(newCourse);
+    }
+
+    // API FOR GET ALL COURSES
+    @GetMapping("/getCourses") // Endpoint for getting all courses
+    List<Course> getAllCourse() { // Retrieves all courses
         return courseService.getAllCourse();
     }
 
-    @GetMapping("/{course_id}")
-    public ResponseEntity<Course> getCourseById(@PathVariable Long course_id) {
-        Optional<Course> course = courseService.getCourseById(course_id);
-        return course.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    // API FOR GETTING COURSE BY ID
+    @GetMapping("/course/{course_id}") // Endpoint for getting a course by its ID
+    Course getCourseById(@PathVariable Long course_id) { // Retrieves course by its ID
+        return courseService.getCourseById(course_id);
     }
 
-    @PostMapping("/postCourse")
-    public ResponseEntity<Course> createCourse(@RequestBody Course course) {
-        Course createdCourse = courseService.saveOrUpdateCourse(course);
-        return new ResponseEntity<>(createdCourse, HttpStatus.CREATED);
+    // API FOR GETTING COURSES BY CHAPTER ID
+    @GetMapping("/byChapter/{chapter_id}") // Endpoint for getting courses by chapter ID
+    public List<Course> getCourseByChapterId(@PathVariable Long chapter_id) { // Retrieves courses by chapter ID
+        return courseService.getCourseByChapterId(chapter_id);
     }
 
-    @PutMapping("/{course_id}")
-    public ResponseEntity<Course> updateCourse(@PathVariable Long course_id, @RequestBody Course courseDetails) {
-        Optional<Course> course = courseService.getCourseById(course_id);
-        if (course.isPresent()) {
-            Course updatedCourse = courseService.saveOrUpdateCourse(courseDetails);
+    // API FOR UPDATING COURSE BY ID
+    @PutMapping("/course/{course_id}") // Endpoint for updating a course by its ID
+    Course updateCourse(@RequestBody Course newCourse, @PathVariable Long course_id) { // Updates course by its ID
+        return courseService.updateCourse(newCourse, course_id);
+    }
+
+    // API FOR DELETING COURSE BY ID
+    @DeleteMapping("/course/{course_id}") // Endpoint for deleting a course by its ID
+    public String deleteCourse(@PathVariable Long course_id) { // Method signature to delete a course by its ID
+        return courseService.deleteCourse(course_id);
+    }
+
+    // API FOR ADDING CHAPTER TO COURSE
+    @PostMapping("/course/{course_id}/chapters") // Endpoint for adding a chapter to a course
+    // Adds chapter to course
+    public ResponseEntity<Course> addChapterToCourse(@PathVariable Long course_id, @RequestBody Chapter chapter) {
+        Course updatedCourse = courseService.addChapterToCourse(course_id, chapter);
+        if (updatedCourse != null) {
             return new ResponseEntity<>(updatedCourse, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Handle course not found scenario
     }
-
-    @DeleteMapping("/{course_id}")
-    public ResponseEntity<Void> deleteCourse(@PathVariable Long course_id) {
-        courseService.deleteCourse(course_id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-    // @Autowired // Injection of CourseRepository dependency
-    // CourseRepository courseRepository;
-
-    // // API FOR CREATE NEW COURSE
-    // @PostMapping("/postCourses") // Endpoint for creating a new course
-    // Course newCourse(@RequestBody Course newCourse) { // Creates a new course
-    //     return courseService.saveCourse(newCourse);
-    // }
-
-    // // API FOR GET ALL COURSES
-    // @GetMapping("/getCourses") // Endpoint for getting all courses
-    // List<Course> getAllCourse() { // Retrieves all courses
-    //     return courseService.getAllCourse();
-    // }
-
-    // // API FOR GETTING COURSE BY ID
-    // @GetMapping("/course/{course_id}") // Endpoint for getting a course by its ID
-    // Course getCourseById(@PathVariable Long course_id) { // Retrieves course by its ID
-    //     return courseService.getCourseById(course_id);
-    // }
-
-    // // API FOR GETTING COURSES BY CHAPTER ID
-    // // @GetMapping("/byChapter/{chapter_id}") // Endpoint for getting courses by chapter ID
-    // // public List<Course> getCourseByChapterId(@PathVariable Long chapter_id) { // Retrieves courses by chapter ID
-    // //     return courseService.getCourseByChapterId(chapter_id);
-    // // }
-
-    // // API FOR UPDATING COURSE BY ID
-    // @PutMapping("/course/{course_id}") // Endpoint for updating a course by its ID
-    // Course updateCourse(@RequestBody Course newCourse, @PathVariable Long course_id) { // Updates course by its ID
-    //     return courseService.updateCourse(newCourse, course_id);
-    // }
-
-    // // API FOR DELETING COURSE BY ID
-    // @DeleteMapping("/course/{course_id}") // Endpoint for deleting a course by its ID
-    // public String deleteCourse(@PathVariable Long course_id) { // Method signature to delete a course by its ID
-    //     return courseService.deleteCourse(course_id);
-    // }
-
-    // // API FOR ADDING CHAPTER TO COURSE
-    // // @PostMapping("/course/{course_id}/chapters") // Endpoint for adding a chapter to a course
-    // // // Adds chapter to course
-    // // public ResponseEntity<Course> addChapterToCourse(@PathVariable Long course_id, @RequestBody Chapter chapter) {
-    // //     Course updatedCourse = courseService.addChapterToCourse(course_id, chapter);
-    // //     if (updatedCourse != null) {
-    // //         return new ResponseEntity<>(updatedCourse, HttpStatus.OK);
-    // //     }
-    // //     return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Handle course not found scenario
-    // // }
 }
