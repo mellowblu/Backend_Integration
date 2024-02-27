@@ -1,6 +1,8 @@
 package com.backend.integration.Controller; 
 
-import java.util.List; 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired; 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController; 
 
-import com.backend.integration.Entity.Chapter; 
+import com.backend.integration.Entity.Chapter;
+import com.backend.integration.Entity.Course;
 import com.backend.integration.Entity.Topic;
 import com.backend.integration.Service.ChapterService;
 
@@ -26,50 +29,86 @@ public class ChapterController {
     @Autowired // Injection of ChapterService dependency
     private ChapterService chapterService;
 
-    // POST MAPPING FOR CREATING NEW CHAPTER
-    @PostMapping("/postChapter")
-    public Chapter saveChapter(@RequestBody Chapter newChapter) { // Saves a new chapter
-        return chapterService.saveChapter(newChapter);
-    }
+    
 
-    // GET MAPPING FOR GETTING ALL CHAPTERS
-    @GetMapping("/getChapter")
-    List<Chapter> getAllChapter() { // Retrieves all chapters
+       @GetMapping("/chapters")
+    public List<Chapter> getAllChapter() {
         return chapterService.getAllChapter();
     }
 
-    // GET MAPPING FOR GETTING CHAPTERS BY ID
-    @GetMapping("/chapter/{chapter_id}")
-    Chapter getChapterById(@PathVariable Long chapter_id) { // Retrieves chapter by its ID
-        return chapterService.getChapterById(chapter_id);
+    @GetMapping("/{chapter_id}")
+    public ResponseEntity<Chapter> getChapterById(@PathVariable Long chapter_id) {
+        Optional<Chapter> chapter = chapterService.getChapterById(chapter_id);
+        return chapter.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    // PUT MAPPING FOR UPDATING CHAPTERS BY ID
-    @PutMapping("/chapter/{chapter_id}")
-    Chapter updateChapter(@RequestBody Chapter newChapter, @PathVariable Long chapter_id) { // Updates chapter by its ID
-        return chapterService.updateChapter(newChapter, chapter_id);
+    @PostMapping("/postChapter")
+    public ResponseEntity<Chapter> createChapter(@RequestBody Chapter chapter) {
+        Chapter createdChapter = chapterService.saveOrUpdateCourse(chapter);
+        return new ResponseEntity<>(createdChapter, HttpStatus.CREATED);
     }
 
-    // DELETE MAPPING TO UPDATE CHAPTERS BY ID
-    @DeleteMapping("/chapter/{chapter_id}")
-    String deleteChapter(@PathVariable Long chapter_id) { // Deletes chapter by its ID
-        return chapterService.deleteChapter(chapter_id);
-    }
-
-    // GET MAPPING TO GETTING CHAPTERS BY COURSE ID
-    @GetMapping("/byCourse/{course_id}")
-    public List<Chapter> getChapterByCourseId(@PathVariable Long course_id) { // Retrieves chapters by course ID
-        return chapterService.getChapterByCourseId(course_id);
-    }
-
-    //  POST MAPPING TO ADD TOPIC TO CHAPTER
-    @PostMapping("/chapter/{chapter_id}/topics")
-    // adds topic to chapter collection
-    public ResponseEntity<Chapter> addTopicToChapter(@PathVariable Long chapter_id, @RequestBody Topic topic) {
-        Chapter updatedChapter = chapterService.addTopicToChapter(chapter_id, topic);
-        if (updatedChapter != null) {
-            return new ResponseEntity<>(updatedChapter, HttpStatus.OK); // Returns updated chapter if successful
+    @PutMapping("/{chapter_id}")
+    public ResponseEntity<Chapter> updateTopic(@PathVariable Long chapter_id, @RequestBody Chapter chapterDetails) {
+        Optional<Chapter> chapter = chapterService.getChapterById(chapter_id);
+        if (chapter.isPresent()) {
+            Chapter updatedChapter = chapterService.saveOrUpdateCourse(chapterDetails);
+            return new ResponseEntity<>(updatedChapter, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Handles course not found scenario
     }
+
+    @DeleteMapping("/{chapter_id}")
+    public ResponseEntity<Void> deleteChapter(@PathVariable Long chapter_id) {
+        chapterService.deleteChapter(chapter_id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+    // // POST MAPPING FOR CREATING NEW CHAPTER
+    // @PostMapping("/postChapter")
+    // public Chapter saveChapter(@RequestBody Chapter newChapter) { // Saves a new chapter
+    //     return chapterService.saveChapter(newChapter);
+    // }
+
+    // // GET MAPPING FOR GETTING ALL CHAPTERS
+    // @GetMapping("/getChapter")
+    // List<Chapter> getAllChapter() { // Retrieves all chapters
+    //     return chapterService.getAllChapter();
+    // }
+
+    // // GET MAPPING FOR GETTING CHAPTERS BY ID
+    // @GetMapping("/chapter/{chapter_id}")
+    // Chapter getChapterById(@PathVariable Long chapter_id) { // Retrieves chapter by its ID
+    //     return chapterService.getChapterById(chapter_id);
+    // }
+
+    // // PUT MAPPING FOR UPDATING CHAPTERS BY ID
+    // @PutMapping("/chapter/{chapter_id}")
+    // Chapter updateChapter(@RequestBody Chapter newChapter, @PathVariable Long chapter_id) { // Updates chapter by its ID
+    //     return chapterService.updateChapter(newChapter, chapter_id);
+    // }
+
+    // // DELETE MAPPING TO UPDATE CHAPTERS BY ID
+    // // @DeleteMapping("/chapter/{chapter_id}")
+    // // String deleteChapter(@PathVariable Long chapter_id) { // Deletes chapter by its ID
+    // //     return chapterService.deleteChapter(chapter_id);
+    // // }
+
+    // // // GET MAPPING TO GETTING CHAPTERS BY COURSE ID
+    // // @GetMapping("/byCourse/{course_id}")
+    // // public List<Chapter> getChapterByCourseId(@PathVariable Long course_id) { // Retrieves chapters by course ID
+    // //     return chapterService.getChapterByCourseId(course_id);
+    // // }
+
+    // //  POST MAPPING TO ADD TOPIC TO CHAPTER
+    // // @PostMapping("/chapter/{chapter_id}/topics")
+    // // // adds topic to chapter collection
+    // // public ResponseEntity<Chapter> addTopicToChapter(@PathVariable Long chapter_id, @RequestBody Topic topic) {
+    // //     Chapter updatedChapter = chapterService.addTopicToChapter(chapter_id, topic);
+    // //     if (updatedChapter != null) {
+    // //         return new ResponseEntity<>(updatedChapter, HttpStatus.OK); // Returns updated chapter if successful
+    // //     }
+    // //     return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Handles course not found scenario
+    // // }
 }
