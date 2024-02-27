@@ -21,17 +21,16 @@ public class FinalScore {
     private Long fscore_id;
     private Integer final_score;
     
+    private String remarks;
     @ManyToOne
     @JoinColumn(name = "quiz_taken_id")
     private QuizTaken quizTaken;
 
-    @ManyToOne
-    @JoinColumn(name = "assessment")
-    private Assessment assessment;
 
     @Column(name="end_date", nullable = false, updatable = false)
     @CreationTimestamp
     private LocalDate end_date;
+
 
     public Long getFscore_id() {
         return this.fscore_id;
@@ -49,20 +48,20 @@ public class FinalScore {
         this.final_score = final_score;
     }
 
+    public String getRemarks() {
+        return this.remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+
     public QuizTaken getQuizTaken() {
         return this.quizTaken;
     }
 
     public void setQuizTaken(QuizTaken quizTaken) {
         this.quizTaken = quizTaken;
-    }
-
-    public Assessment getAssessment() {
-        return this.assessment;
-    }
-
-    public void setAssessment(Assessment assessment) {
-        this.assessment = assessment;
     }
 
     public LocalDate getEnd_date() {
@@ -73,4 +72,6 @@ public class FinalScore {
         this.end_date = end_date;
     }
 
+   
+   
 }   
