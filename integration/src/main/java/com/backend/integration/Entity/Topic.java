@@ -22,8 +22,8 @@ public class Topic {
     private String topic_link; // Link associated with the topic
 
     // JPA relationship many-to-one between Chapter and Topic
-    @JsonIgnore // Ignores serialization and deserialization of this property
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY) // Defines the many-to-one relationship with lazy loading
+   // @JsonIgnore // Ignores serialization and deserialization of this property
+    @ManyToOne //(cascade = CascadeType.ALL, fetch = FetchType.LAZY) // Defines the many-to-one relationship with lazy loading
     @JoinColumn(name ="chapter_id") // Specifies the foreign key column in the Topic table
     private Chapter chapter; // Associated chapter for the topic
 

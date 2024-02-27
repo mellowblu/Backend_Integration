@@ -2,17 +2,19 @@ package com.backend.integration.Entity; // Package declaration
 
 
 import java.sql.Date;
-import java.util.List;
+// import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+// import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.CascadeType; // Importing CascadeType from jakarta.persistence package
+// import jakarta.persistence.CascadeType; // Importing CascadeType from jakarta.persistence package
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
+// import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+// import jakarta.persistence.OneToMany;
 
 @Entity
 public class Course {
@@ -23,6 +25,10 @@ public class Course {
     private String course_title; // Title of the course
     private String course_description; // Description of the course
     private Date course_date_created; 
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user_id;
 
 
     //  @JsonIgnore
@@ -39,23 +45,23 @@ public class Course {
     // }
 
     // Mapping many-to-one relationship from Chapter
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Chapter> chapter; // List of chapters associated with the course
+    // @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    // private List<Chapter> chapter; // List of chapters associated with the course
 
-    public List<Chapter> getChapter() {
-        return this.chapter;
-    }
+    // public List<Chapter> getChapter() {
+    //     return this.chapter;
+    // }
 
-    public void setChapter(List<Chapter> chapter) {
-        this.chapter = chapter;
-    }
+    // public void setChapter(List<Chapter> chapter) {
+    //     this.chapter = chapter;
+    // }
 
     // Used in adding chapter inside course
-    @JsonIgnore
-    public void addChapter(Chapter chapter) {
-        chapter.setCourse(this); // Set the course for the chapter
-        this.getChapter().add(chapter); // Add the chapter to the collection of chapters
-    }
+    // @JsonIgnore
+    // public void addChapter(Chapter chapter) {
+    //     chapter.setCourse(this); // Set the course for the chapter
+    //     this.getChapter().add(chapter); // Add the chapter to the collection of chapters
+    // }
 
     public Long getCourse_id() {
         return this.course_id;
@@ -87,6 +93,14 @@ public class Course {
 
     public void setCourse_date_created(Date course_date_created) {
         this.course_date_created = course_date_created;
+    }
+    
+    public User getUser_id() {
+        return this.user_id;
+    }
+
+    public void setUser_id(User user_id) {
+        this.user_id = user_id;
     }
 
 
