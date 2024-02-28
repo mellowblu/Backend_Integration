@@ -15,6 +15,8 @@ import com.backend.integration.Entity.Topic;
 import com.backend.integration.Exceptions.TopicNotFoundException;
 import com.backend.integration.Repo.TopicRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service // Annotation to indicate this class as a service
 public class TopicService {
     @Autowired // Annotation for dependency injection of TopicRepository bean
@@ -30,7 +32,6 @@ public class TopicService {
         return topicRepository.findById(topic_id) // referring to findById() method of TopicRepository interface
                 .orElseThrow(() -> new TopicNotFoundException(topic_id)); // Handling TopicNotFoundException
     }
-
 
     // Function to save a new topic
     public Topic saveTopic(Topic newTopic) {
@@ -57,12 +58,15 @@ public class TopicService {
     }
 
     // Function to delete a topic by its ID
-    public String deleteTopic(@PathVariable Long topic_id) { // Method signature to delete a topic by its ID
-        if (!topicRepository.existsById(topic_id)) { // Checking if topic exists
-            throw new TopicNotFoundException(topic_id); // Throwing TopicNotFoundException if topic not found
-        }
-        topicRepository.deleteTopicById(topic_id); // Deleting topic
-        return "Topic with id " + topic_id + " has been successfully deleted"; // Returning success message
+    public String deleteTopic(@PathVariable Long topic_id) { // Method signature
+//    to delete a topic by its ID
+    if (!topicRepository.existsById(topic_id)) { // Checking if topic exists
+    throw new TopicNotFoundException(topic_id); // Throwing
+    //TopicNotFoundException if topic not found
+    }
+    topicRepository.deleteTopicById(topic_id); // Deleting topic
+    return "Topic with id " + topic_id + " has been successfully deleted"; //
+  //  Returning success message
     }
 
     // Function to retrieve topics by chapter ID
@@ -70,5 +74,12 @@ public class TopicService {
         return topicRepository.findByChapter_id(chapter_id); // referring to findByChapter_id() method of
                                                              // TopicRepository interface
     }
+
+    // @Transactional
+
+    // public String deleteTopic(Long topic_id) {
+    // topicRepository.deleteById(topic_id);
+    // return "Topic with id " + topicId + " has been successfully deleted";
+    // }
 
 }

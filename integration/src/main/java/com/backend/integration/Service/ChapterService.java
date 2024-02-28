@@ -11,11 +11,17 @@ import com.backend.integration.Entity.Chapter;
 import com.backend.integration.Entity.Topic;
 import com.backend.integration.Exceptions.ChapterNotFoundException;
 import com.backend.integration.Repo.ChapterRepository;
+import com.backend.integration.Repo.TopicRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service // Annotation to indicate this class as a service
 public class ChapterService {
     @Autowired // Annotation for dependency injection of ChapterRepository bean
     private ChapterRepository chapterRepository; // Declaration of ChapterRepository bean
+
+    @Autowired
+    private TopicRepository topicRepository;
 
     // Function to retrieve all chapters
     public List<Chapter> getAllChapter() { // Method signature to retrieve all chapters
@@ -39,13 +45,20 @@ public class ChapterService {
     }
 
     // Function to delete a chapter by its ID
-    public String deleteChapter(@PathVariable Long chapter_id) { // Method signature to delete a chapter by its ID
-        if (!chapterRepository.existsById(chapter_id)) { // Checking if chapter exists
-            throw new ChapterNotFoundException(chapter_id); // Throwing ChapterNotFoundException if chapter not found
-        }
-        chapterRepository.deleteChapterById(chapter_id); // Deleting chapter
-        return "Chapter with id " + chapter_id + " has been successfully deleted"; // Returning success message
-    }
+    // @Transactional
+    // public String deleteChapter(Long chapterId) {
+    //     // Delete associated topics
+    //     int deletedTopicsCount = topicRepository.deleteByChapterId(chapterId);
+
+    //     // Delete the chapter
+    //     chapterRepository.deleteById(chapterId);
+
+    //     if (deletedTopicsCount == 0) {
+    //         throw new ChapterNotFoundException(chapterId);
+    //     }
+
+    //     return "Chapter with id " + chapterId + " and its associated topics have been successfully deleted";
+    // }
 
     // Function to retrieve chapters by course ID
     public List<Chapter> getChapterByCourseId(Long course_id) { // Method signature to retrieve chapters by course ID
@@ -68,6 +81,21 @@ public class ChapterService {
             chapter.addTopic(topic); // Adding topic to chapter
             return chapterRepository.save(chapter); // Saving updated chapter
         } throw new ChapterNotFoundException(chapter_id); // Returning error message if chapter not found
+    }
+
+    @Transactional
+    public String deleteChapter(Long chapterId) {
+        Chapter chapter = chapterRepository.findById(chapterId)
+                .orElseThrow(() -> new ChapterNotFoundException(chapterId));
+
+        List<Topic> topics = chapter.getTopic();
+        for (Topic topic : topics) {
+            topicRepository.delete(topic);
+        }
+
+        chapterRepository.delete(chapter);
+
+        return "Chapter with id " + chapterId + " and its associated topics have been successfully deleted";
     }
     //febraury 13 2024
 }

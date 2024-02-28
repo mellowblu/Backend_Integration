@@ -27,7 +27,7 @@ public class Chapter {
 
     // MANY TO ONE RELATIONSHIP BETWEEN COURSE AND CHAPTER
     @JsonIgnore // Ignores serialization and deserialization of this property
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY) // Defines a many-to-one relationship
+    @ManyToOne //(cascade = CascadeType.ALL, fetch = FetchType.LAZY) // Defines a many-to-one relationship
     @JoinColumn(name = "course_id") // Defines the foreign key column in the Chapter table
     private Course course; // Associated course for the chapter
 
