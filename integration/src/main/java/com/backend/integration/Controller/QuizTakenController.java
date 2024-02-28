@@ -33,6 +33,16 @@ public class QuizTakenController {
         return quizTakenService.getAllQuizTakens();
     }
 
+    @GetMapping("/average-score/quiztakens/{enrollmentId}")
+    public Double getAverageScoreByEnrollmentId(@PathVariable Long enrollmentId) {
+        return quizTakenService.findAverageScoreByEnrollmentId(enrollmentId);
+    }
+
+    @GetMapping("/quiztaken-by-enrollment/{enrollmentId}")
+    public List<QuizTaken> getQuizTakenByEnrollmentId(@PathVariable Long enrollmentId) {
+        return quizTakenService.findByEnrollmentId(enrollmentId);
+    }
+
     @GetMapping("/quiztaken/{quiz_taken_id}")
     public ResponseEntity<QuizTaken> getQuizTakenById(@PathVariable Long quiz_taken_id) {
         Optional<QuizTaken> quizTaken = quizTakenService.getQuizTakenById(quiz_taken_id);

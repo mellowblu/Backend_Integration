@@ -33,6 +33,12 @@ public class FinalScoreController {
         return finalScoreService.getAllFinalScores();
     }
 
+    @GetMapping("/calculate/finalscore/{enrollmentId}")
+    public String calculateAndSaveAverageScore(@PathVariable Long enrollmentId) {
+        finalScoreService.calculateAndSaveAverageScore(enrollmentId);
+        return "Average score calculated and saved for enrollmentId: " + enrollmentId;
+    }
+
     @GetMapping("/finalscore/{fscore_id}")
     public ResponseEntity<FinalScore> getFinalScoreById(@PathVariable Long fscore_id) {
         Optional<FinalScore> finalScore = finalScoreService.getFinalScoreById(fscore_id);
