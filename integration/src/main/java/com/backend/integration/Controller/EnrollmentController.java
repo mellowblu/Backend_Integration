@@ -30,7 +30,7 @@ public class EnrollmentController {
         return enrollmentService.getAllEnrollments();
     }
 
-    @GetMapping("/{enrollmentId}")
+    @GetMapping("/enrollment/{enrollmentId}")
     public ResponseEntity<Enrollment> getEnrollmentById(@PathVariable Long enrollmentId) {
         Optional<Enrollment> enrollment = enrollmentService.getEnrollmentById(enrollmentId);
         return enrollment.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
@@ -43,7 +43,7 @@ public class EnrollmentController {
         return new ResponseEntity<>(createdEnrollment, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{enrollmentId}")
+    @PutMapping("/enrollment/{enrollmentId}")
     public ResponseEntity<Enrollment> updateEnrollment(@PathVariable Long enrollmentId, @RequestBody Enrollment enrollmentDetails) {
         Optional<Enrollment> enrollment = enrollmentService.getEnrollmentById(enrollmentId);
         if (enrollment.isPresent()) {
@@ -54,7 +54,7 @@ public class EnrollmentController {
         }
     }
 
-    @DeleteMapping("/{enrollmentId}")
+    @DeleteMapping("/enrollment/{enrollmentId}")
     public ResponseEntity<Void> deleteEnrollment(@PathVariable Long enrollmentId) {
         enrollmentService.deleteEnrollment(enrollmentId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

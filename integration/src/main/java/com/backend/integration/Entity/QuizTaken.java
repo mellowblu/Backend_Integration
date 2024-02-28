@@ -24,8 +24,8 @@ public class QuizTaken {
     private Quiz quiz;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "enrollment_id")
+    private Enrollment enrollment;
 
     @ManyToOne
     @JoinColumn(name = "assessment_id")
@@ -54,12 +54,12 @@ public class QuizTaken {
         this.quiz = quiz;
     }
 
-    public User getUser() {
-        return this.user;
+    public Enrollment getEnrollment() {
+        return this.enrollment;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setEnrollment(Enrollment enrollment) {
+        this.enrollment = enrollment;
     }
 
     public Assessment getAssessment() {
@@ -85,7 +85,8 @@ public class QuizTaken {
     public void setScore(Integer score) {
         this.score = score;
     }
-    
 
+
+  
 
 }

@@ -17,6 +17,10 @@ public class QuizTakenService {
      @Autowired
     private QuizTakenRepository quizTakenRepository;
 
+    public List<QuizTaken> findByEnrollmentId(Long enrollmentId) {
+        return quizTakenRepository.findByEnrollmentId(enrollmentId);
+    }
+
     public List<QuizTaken> getAllQuizTakens() {
         return quizTakenRepository.findAll();
     }
@@ -31,5 +35,9 @@ public class QuizTakenService {
 
     public void deleteQuizTaken(Long quiz_taken_id) {
         quizTakenRepository.deleteById(quiz_taken_id);
+    }
+
+    public Double findAverageScoreByEnrollmentId(Long enrollmentId) {
+        return quizTakenRepository.findAverageScoreByEnrollmentId(enrollmentId);
     }
 }

@@ -9,18 +9,19 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
-public class Question {
+public class AssessmentQuestion {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
-    private Long question_id;
+    private Long aquestion_id;
 
-    @Column(name="question", length = 1000)
-    private String question;    
-    
     @ManyToOne
-    @JoinColumn(name = "quiz_id")
-    private Quiz quiz;
+    @JoinColumn(name = "assessment_id")
+    private Assessment assessment;
+
+     @Column(name="question", length = 1000)
+    private String question;
 
     @Column(name="correct_answer", length = 1000)
     private String correct_answer;
@@ -35,12 +36,20 @@ public class Question {
     private String choice_3;
 
 
-    public Long getQuestion_id() {
-        return this.question_id;
+    public Long getAquestion_id() {
+        return this.aquestion_id;
     }
 
-    public void setQuestion_id(Long question_id) {
-        this.question_id = question_id;
+    public void setAquestion_id(Long aquestion_id) {
+        this.aquestion_id = aquestion_id;
+    }
+
+    public Assessment getAssessment() {
+        return this.assessment;
+    }
+
+    public void setAssessment(Assessment assessment) {
+        this.assessment = assessment;
     }
 
     public String getQuestion() {
@@ -49,14 +58,6 @@ public class Question {
 
     public void setQuestion(String question) {
         this.question = question;
-    }
-
-    public Quiz getQuiz() {
-        return this.quiz;
-    }
-
-    public void setQuiz(Quiz quiz) {
-        this.quiz = quiz;
     }
 
     public String getCorrect_answer() {
@@ -90,5 +91,7 @@ public class Question {
     public void setChoice_3(String choice_3) {
         this.choice_3 = choice_3;
     }
+
+  
 
 }
