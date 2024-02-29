@@ -26,30 +26,37 @@ public class Chapter {
     private Date chapter_date_created; // Date when the chapter was created
 
     // MANY TO ONE RELATIONSHIP BETWEEN COURSE AND CHAPTER
-    //@JsonIgnore // Ignores serialization and deserialization of this property
+    @JsonIgnore // Ignores serialization and deserialization of this property
     @ManyToOne //(cascade = CascadeType.ALL, fetch = FetchType.LAZY) // Defines a many-to-one relationship
     @JoinColumn(name = "course_id") // Defines the foreign key column in the Chapter table
     private Course course; // Associated course for the chapter
 
-
-    // // JPA relationship one to many between chapter and topic
-    // @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL, fetch = FetchType.LAZY) // Defines a one-to-many relationship
-    // private List<Topic> topic; // List of topics associated with the chapter
-
-    // public List<Topic> getTopic() { // Getter method for topics
-    //     return this.topic;
-    // }
+    public Course getCourse() { // Getter method for course
+        return this.course;
+    }
     
-    // public void setTopic(List<Topic> topic) { // Setter method for topics
-    //     this.topic = topic;
-    // }
+    public void setCourse(Course course) { // Setter method for course
+        this.course = course;
+    }
 
-    // // Method to add a topic to the chapter
-    // @JsonIgnore // Ignores serialization and deserialization of this method
-    // public void addTopic(Topic topic) {
-    //     topic.setChapter(this); // Sets the chapter for the topic
-    //     this.getTopic().add(topic); // Adds the topic to the collection of topics
-    // }
+    // JPA relationship one to many between chapter and topic
+    @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL, fetch = FetchType.LAZY) // Defines a one-to-many relationship
+    private List<Topic> topic; // List of topics associated with the chapter
+
+    public List<Topic> getTopic() { // Getter method for topics
+        return this.topic;
+    }
+    
+    public void setTopic(List<Topic> topic) { // Setter method for topics
+        this.topic = topic;
+    }
+
+    // Method to add a topic to the chapter
+    @JsonIgnore // Ignores serialization and deserialization of this method
+    public void addTopic(Topic topic) {
+        topic.setChapter(this); // Sets the chapter for the topic
+        this.getTopic().add(topic); // Adds the topic to the collection of topics
+    }
 
     // Getter and setter methods for chapter properties
     public Long getChapter_id() {
@@ -74,13 +81,5 @@ public class Chapter {
     
     public void setChapter_date_created(Date chapter_date_created) {
         this.chapter_date_created = chapter_date_created;
-    }
-    
-    public Course getCourse() { // Getter method for course
-        return this.course;
-    }
-    
-    public void setCourse(Course course) { // Setter method for course
-        this.course = course;
     }
 }  

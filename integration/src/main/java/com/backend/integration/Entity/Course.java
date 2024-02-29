@@ -1,20 +1,21 @@
 package com.backend.integration.Entity; // Package declaration
 
-
 import java.sql.Date;
-// import java.util.List;
+import java.util.List;
 
-// import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
-// import jakarta.persistence.CascadeType; // Importing CascadeType from jakarta.persistence package
+import jakarta.persistence.CascadeType; // Importing CascadeType from jakarta.persistence package
 import jakarta.persistence.Entity;
-// import jakarta.persistence.FetchType;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-// import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Course {
@@ -24,44 +25,41 @@ public class Course {
 
     private String course_title; // Title of the course
     private String course_description; // Description of the course
-    private Date course_date_created; 
+    private Date course_date_created;
 
+    // @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user_id;
+    @JoinColumn(name = "user_id") // Defines the foreign key column in the cOURSE table
+    private User instructor; // Associated instructor for the course
 
+    public User getInstructor() {
+        return this.instructor;
+    }
 
-    //  @JsonIgnore
-    // @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    // @JoinColumn(name = "instructor_id") // Defines the foreign key column in the cOURSE table
-    // private Instructor instructor; // Associated instructor for the course
-
-    // public Instructor getInstructor() {
-    //     return this.instructor;
-    // }
-
-    // public void setInstructor(Instructor instructor) {
-    //     this.instructor = instructor;
-    // }
+    public void setInstructor(User instructor) {
+        this.instructor = instructor;
+    }
 
     // Mapping many-to-one relationship from Chapter
-    // @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    // private List<Chapter> chapter; // List of chapters associated with the course
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonProperty(access = Access.WRITE_ONLY) // Exclude from serialization
+    private List<Chapter> chapter; // List of chapters associated with the course
 
-    // public List<Chapter> getChapter() {
-    //     return this.chapter;
-    // }
+    @JsonProperty(access = Access.READ_ONLY) // Exclude from deserialization
+    public List<Chapter> getChapter() {
+        return this.chapter;
+    }
 
-    // public void setChapter(List<Chapter> chapter) {
-    //     this.chapter = chapter;
-    // }
+    public void setChapter(List<Chapter> chapter) {
+        this.chapter = chapter;
+    }
 
     // Used in adding chapter inside course
     // @JsonIgnore
-    // public void addChapter(Chapter chapter) {
-    //     chapter.setCourse(this); // Set the course for the chapter
-    //     this.getChapter().add(chapter); // Add the chapter to the collection of chapters
-    // }
+    public void addChapter(Chapter chapter) {
+        chapter.setCourse(this); // Set the course for the chapter
+        this.getChapter().add(chapter); // Add the chapter to the collection of chapters
+    }
 
     public Long getCourse_id() {
         return this.course_id;
@@ -86,7 +84,7 @@ public class Course {
     public void setCourse_description(String course_description) {
         this.course_description = course_description;
     }
-    
+
     public Date getCourse_date_created() {
         return this.course_date_created;
     }
@@ -94,15 +92,5 @@ public class Course {
     public void setCourse_date_created(Date course_date_created) {
         this.course_date_created = course_date_created;
     }
-    
-    public User getUser_id() {
-        return this.user_id;
-    }
-
-    public void setUser_id(User user_id) {
-        this.user_id = user_id;
-    }
-
 
 }
-
