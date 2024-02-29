@@ -1,10 +1,11 @@
 package com.backend.integration.Entity; // Package declaration
 
-
 import java.sql.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import jakarta.persistence.CascadeType; // Importing CascadeType from jakarta.persistence package
 import jakarta.persistence.Entity;
@@ -24,10 +25,9 @@ public class Course {
 
     private String course_title; // Title of the course
     private String course_description; // Description of the course
-    private Date course_date_created; 
+    private Date course_date_created;
 
-
-    //  @JsonIgnore
+    // @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id") // Defines the foreign key column in the cOURSE table
     private User instructor; // Associated instructor for the course
@@ -42,8 +42,10 @@ public class Course {
 
     // Mapping many-to-one relationship from Chapter
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonProperty(access = Access.WRITE_ONLY) // Exclude from serialization
     private List<Chapter> chapter; // List of chapters associated with the course
 
+    @JsonProperty(access = Access.READ_ONLY) // Exclude from deserialization
     public List<Chapter> getChapter() {
         return this.chapter;
     }
@@ -53,7 +55,7 @@ public class Course {
     }
 
     // Used in adding chapter inside course
-    @JsonIgnore
+    // @JsonIgnore
     public void addChapter(Chapter chapter) {
         chapter.setCourse(this); // Set the course for the chapter
         this.getChapter().add(chapter); // Add the chapter to the collection of chapters
@@ -82,7 +84,7 @@ public class Course {
     public void setCourse_description(String course_description) {
         this.course_description = course_description;
     }
-    
+
     public Date getCourse_date_created() {
         return this.course_date_created;
     }
@@ -91,6 +93,4 @@ public class Course {
         this.course_date_created = course_date_created;
     }
 
-
 }
-
