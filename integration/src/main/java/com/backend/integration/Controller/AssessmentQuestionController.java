@@ -27,6 +27,12 @@ public class AssessmentQuestionController {
      @Autowired
     private AssessmentQuestionService assessmentQuestionService;
 
+    @GetMapping("/aquestion-by-assessment/{assessmentId}")
+    public ResponseEntity<List<AssessmentQuestion>> getAssessmentQuestionsByAssessmentId(@PathVariable Long assessmentId) {
+        List<AssessmentQuestion> assessmentQuestions = assessmentQuestionService.getAssessmentQuestionsByAssessmentId(assessmentId);
+        return ResponseEntity.ok(assessmentQuestions);
+    }
+
     @GetMapping("/assessmentquestions")
     public List<AssessmentQuestion> getAllAssessmentQuestions() {
         return assessmentQuestionService.getAllAssessmentQuestions();
