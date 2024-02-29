@@ -16,6 +16,10 @@ public class AssessmentQuestionService {
     @Autowired
     private AssessmentQuestionRepository assessmentQuestionRepository;
 
+    public List<AssessmentQuestion> getAssessmentQuestionsByAssessmentId(Long assessmentId) {
+        return assessmentQuestionRepository.findByAssessmentId(assessmentId);
+    }
+
     public List<AssessmentQuestion> getAllAssessmentQuestions() {
         return assessmentQuestionRepository.findAll();
     }

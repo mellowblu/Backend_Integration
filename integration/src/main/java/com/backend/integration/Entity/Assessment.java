@@ -18,9 +18,6 @@ public class Assessment {
     @JoinColumn(name = "course_id")
     private Course course;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
     
     private String assessment_title;
 
@@ -39,14 +36,6 @@ public class Assessment {
 
     public void setCourse(Course course) {
         this.course = course;
-    }
-
-    public User getUser() {
-        return this.user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public String getAssessment_title() {
