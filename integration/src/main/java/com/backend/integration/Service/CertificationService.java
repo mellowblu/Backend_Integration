@@ -30,4 +30,9 @@ public class CertificationService {
     public void deleteCertification(Long certificateID) {
         certificationRepository.deleteById(certificateID);
     }
+
+    public List<Certification> getCertificationByUserId(Long user_id) {
+        return certificationRepository.findByUserId(user_id);
+      }
+    
 }

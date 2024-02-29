@@ -18,19 +18,19 @@ import com.backend.integration.Entity.Certification;
 import com.backend.integration.Service.CertificationService;
 
 @RestController
-@RequestMapping("/certifications")
+@RequestMapping("/api/v1/auth")
 public class CertificationController {
 
     @Autowired
     private CertificationService certificationService;
 
-    @GetMapping
+    @GetMapping("/certificate")
     public ResponseEntity<List<Certification>> getAllCertifications() {
         List<Certification> certifications = certificationService.getAllCertifications();
         return new ResponseEntity<>(certifications, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/certificate/{id}")
     public ResponseEntity<Certification> getCertificationById(@PathVariable("id") Long certificateID) {
         Optional<Certification> certification = certificationService.getCertificationById(certificateID);
         return certification.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
@@ -43,9 +43,15 @@ public class CertificationController {
         return new ResponseEntity<>(createdCertification, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/certificate/remove/{id}")
     public ResponseEntity<Void> deleteCertification(@PathVariable("id") Long certificateID) {
         certificationService.deleteCertification(certificateID);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @GetMapping("/myCertification/{user_id}")
+  public List<Certification> getCertificationByUserId(
+      @PathVariable Long user_id) {
+    return certificationService.getCertificationByUserId(user_id);
+  }
 }
