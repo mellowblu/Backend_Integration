@@ -16,6 +16,14 @@ public class EnrollmentService {
     @Autowired
     private EnrollmentRepository enrollmentRepository;
 
+    public EnrollmentService(EnrollmentRepository enrollmentRepository) {
+        this.enrollmentRepository = enrollmentRepository;
+    }
+
+    public List<Enrollment> findEnrollmentsByUserId(int userId) {
+        return enrollmentRepository.findEnrollmentsByUserId(userId);
+    }
+
     public List<Enrollment> getAllEnrollments() {
         return enrollmentRepository.findAll();
     }

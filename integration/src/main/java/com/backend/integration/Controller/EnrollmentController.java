@@ -25,6 +25,16 @@ public class EnrollmentController {
     @Autowired
     private EnrollmentService enrollmentService;
 
+
+    public EnrollmentController(EnrollmentService enrollmentService) {
+        this.enrollmentService = enrollmentService;
+    }
+
+    @GetMapping("/enrollment-by-user/{userId}")
+    public List<Enrollment> getEnrollmentsByUserId(@PathVariable int userId) {
+        return enrollmentService.findEnrollmentsByUserId(userId);
+    }
+
     @GetMapping("/enrollments")
     public List<Enrollment> getAllEnrollments() {
         return enrollmentService.getAllEnrollments();
