@@ -43,9 +43,7 @@ public class UserDto {
 
     private boolean isVerified; // Add the isVerified field
 
-    // Other fields and methods...
-
-    // Add getter and setter for isVerified
+    // Getter and Setter for isVerified
     public boolean isVerified() {
         return isVerified;
     }   
@@ -54,19 +52,21 @@ public class UserDto {
         this.isVerified = isVerified;
     }
 
-    // Add getter and setter for username
+    // Getter and Setter for username
     public String getUsername() {
         return username;
     }
 
+    // Getter and Setter for phoneNumber
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public String setPhoneNumber() {
-        return phoneNumber;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
-    
+
+    // Setter for username
     public void setUsername(String username) {
         this.username = username;
     }

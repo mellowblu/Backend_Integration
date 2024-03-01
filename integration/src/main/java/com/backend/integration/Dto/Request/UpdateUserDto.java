@@ -13,6 +13,7 @@ public class UpdateUserDto {
     @Size(max = 30, message = "Username cannot exceed 30 characters")
     private String userName;
 
+    // Getter and Setter for userName
     public String getUserName() {
         return userName;
     }
@@ -21,6 +22,7 @@ public class UpdateUserDto {
         this.userName = userName;
     }
 
+    // Getter and Setter for firstName
     public String getFirstName() {
         return firstName;
     }
@@ -29,6 +31,7 @@ public class UpdateUserDto {
         this.firstName = firstName;
     }
 
+    // Getter and Setter for lastName
     public String getLastName() {
         return lastName;
     }
@@ -37,5 +40,4 @@ public class UpdateUserDto {
         this.lastName = lastName;
     }
 
-    // Add getters and setters for additional fields
 }

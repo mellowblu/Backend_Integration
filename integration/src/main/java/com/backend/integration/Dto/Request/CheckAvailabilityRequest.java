@@ -5,8 +5,7 @@ public class CheckAvailabilityRequest {
     private String email;
     private String phoneNumber;
 
-    // Getter and Setter
-
+    // Getter and Setter for phoneNumber
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -15,6 +14,7 @@ public class CheckAvailabilityRequest {
         this.phoneNumber = phoneNumber;
     }
 
+    // Getter and Setter for username
     public String getUsername() {
         return username;
     }
@@ -23,6 +23,7 @@ public class CheckAvailabilityRequest {
         this.username = username;
     }
 
+    // Getter and Setter for email
     public String getEmail() {
         return email;
     }
@@ -32,14 +33,22 @@ public class CheckAvailabilityRequest {
     }
 
     // Constructors
+
+    // Constructor with only username
     public CheckAvailabilityRequest(String username) {
         this.username = username;
     }
 
+    // Constructor with both username and email
     public CheckAvailabilityRequest(String username, String email) {
         this.username = username;
         this.email = email;
     }
 
-    //Add constructor for phone number
+    // Constructor with all fields
+    public CheckAvailabilityRequest(String username, String email, String phoneNumber) {
+        this.username = username;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+    }
 }

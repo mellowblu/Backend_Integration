@@ -4,6 +4,7 @@ public class LoginMessage {
     private String message;
     private Boolean success;
 
+    // Getter and Setter for message
     public String getMessage() {
         return message;
     }
@@ -12,6 +13,7 @@ public class LoginMessage {
         this.message = message;
     }
 
+    // Getter and Setter for success
     public Boolean isSuccess() {
         return success;
     }
@@ -20,6 +22,7 @@ public class LoginMessage {
         this.success = success;
     }
 
+    // Constructor with parameters
     public LoginMessage(String message, Boolean success) {
         this.message = message;
         this.success = success;

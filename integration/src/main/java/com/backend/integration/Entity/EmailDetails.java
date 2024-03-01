@@ -18,6 +18,7 @@ public class EmailDetails {
     private String generatedCode;
     private LocalDateTime expirationTime; 
 
+    // Getter and Setter for content
     public String getContent() {
         return msgBody;
     }
@@ -25,9 +26,13 @@ public class EmailDetails {
     public void setContent(String content) {
         this.msgBody = content;
     }
+
+    // Setter for expirationTime
     public void setExpirationTime(LocalDateTime expirationTime) {
         this.expirationTime = expirationTime;
     }
+
+    // Getter for expirationTime
     public LocalDateTime getExpirationTime() {
         return expirationTime;
     }

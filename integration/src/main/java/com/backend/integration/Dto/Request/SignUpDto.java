@@ -16,19 +16,22 @@ public record SignUpDto(
         @NotBlank @Pattern(regexp = "09\\d{9}") String phoneNumber,
         Role role
 ) {
-    // Add a getter for email
+    // Getter for email
     public String getEmail() {
         return email;
     }
 
+    // Getter for userName
     public String getUserName() {
         return userName;
     }
 
+    // Getter for role
     public Role getRole() {
         return role;
     }
 
+    // Getter for phoneNumber
     public String getPhoneNumber() {
         return phoneNumber;
     }

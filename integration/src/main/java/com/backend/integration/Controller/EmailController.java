@@ -33,21 +33,23 @@ public class EmailController {
 
     @Autowired
     private EmailService emailService;
-    
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    // Sends a simple email
     @PostMapping("/sendMail")
     public String sendMail(@RequestBody EmailDetails details) {
         return emailService.sendSimpleMail(details);
     }
 
+    // Sends an email with an attachment
     @PostMapping("/sendMailWithAttachment")
     public String sendMailWithAttachment(@RequestBody EmailDetails details) {
         return emailService.sendMailWithAttachment(details);
     }
 
+    // Generates and stores a verification code for a user
     @PostMapping("/generateVerificationCode")
     public String generateVerificationCode(@RequestBody EmailDetails details) {
         long expirationTimeInMillis = System.currentTimeMillis() + (5 * 1000); // 5 minutes in milliseconds
@@ -56,27 +58,27 @@ public class EmailController {
         return generatedCode;
     }
 
-    // New endpoint for resending verification code
+    // Resends a verification code for a user
     @PostMapping("/resendCode")
     public ResponseEntity<String> resendVerificationCode(@RequestBody EmailDetails details) {
         try {
             String userEmail = details.getRecipient();
             User user = authService.getUserByEmail(userEmail);
-    
+
             if (user == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
             }
-    
+
             // Generate and store a new verification code for the user
             String newVerificationCode = emailService.generateVerificationCode(); // Assuming this generates a new code
-    
+
             VerificationCodeEntity existingVerificationCode = emailService.getStoredVerificationInfoForUser(userEmail);
-    
+
             if (existingVerificationCode != null) {
                 // Update the existing verification code
                 existingVerificationCode.setVerificationCode(newVerificationCode);
                 existingVerificationCode.setExpirationTimeInMillis(System.currentTimeMillis() + (5 * 60 * 1000)); // Set new expiration time
-    
+
                 // Save the updated verification code to the database
                 emailService.saveVerificationCode(existingVerificationCode);
             } else {
@@ -87,7 +89,7 @@ public class EmailController {
                 newVerificationCodeEntity.setExpirationTimeInMillis(System.currentTimeMillis() + (5 * 60 * 1000)); // Set expiration time to 5 minutes
                 emailService.saveVerificationCode(newVerificationCodeEntity);
             }
-    
+
             // Send email with the new verification code
             EmailDetails emailDetails = new EmailDetails();
             emailDetails.setRecipient(userEmail);
@@ -95,14 +97,14 @@ public class EmailController {
             emailDetails.setSubject("New Verification Code");
             emailDetails.setContent("Your new verification code is: " + newVerificationCode);
             emailService.sendSimpleMail(emailDetails);
-    
+
             return ResponseEntity.ok("Verification code resent successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to resend verification code");
         }
     }
-    
-    
+
+    // Verifies a user-entered verification code
     @PostMapping("/verifyCode")
     public ResponseEntity<String> verifyCode(@RequestBody EmailDetails details) {
         System.out.println("Received Verification Request: " + details.toString());
@@ -117,63 +119,65 @@ public class EmailController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Verification failed");
         }
     }
-    // Add this method to AuthController
+
+    // Checks the expiration status of a verification code
     @GetMapping("/checkCodeExpiration")
     public ResponseEntity<Map<String, Object>> checkCodeExpiration(@RequestParam String email) {
         try {
             VerificationCodeEntity verificationCodeEntity = emailService.getStoredVerificationInfoForUser(email);
             boolean codeExpired = emailService.isVerificationCodeExpired(email);
-    
+
             Map<String, Object> response = new HashMap<>();
             response.put("codeExpired", codeExpired);
             response.put("expirationTime", verificationCodeEntity.getExpirationTimeInMillis()); // Assuming getExpirationTimeInMillis() method exists
-    
+
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.singletonMap("error", "Internal Server Error"));
         }
     }
-    
-// <-----------FORGOT PASSWORD----------->    
 
-@PostMapping("/forgot-password")
-public ResponseEntity<String> initiateForgotPassword(@RequestBody ForgotPasswordRequest request) {
-    try {
-        emailService.initiateForgotPassword(request.getEmail());
-        return ResponseEntity.ok("Reset link sent successfully.");
-    } catch (UserNotFoundException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found for email: " + request.getEmail());
-    } catch (Exception e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
-    }
-}
-
-
-  @GetMapping("/verify-forgot-code")
-  public ResponseEntity<String> verifyForgotCode(
-          @RequestParam("email") String email,
-          @RequestParam("code") String code) {
-      if (emailService.isForgotCodeValid(email, code)) {
-          return ResponseEntity.ok("Code is valid.");
-      } else {
-          return ResponseEntity.badRequest().body("Invalid Code.");
-      }
-  }
-
-  @PostMapping("/reset-password")
-  public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordRequest request) {
-      try {
-          emailService.resetPassword(request.getEmail(), request.getCode(), request.getNewPassword());
-          String hashedPassword = passwordEncoder.encode(request.getNewPassword());
-          emailService.updatePassword(request.getEmail(), hashedPassword);
-          return ResponseEntity.ok("Password reset successfully.");
-      } catch (Exception e) {
-          // Log the exception
-          e.printStackTrace();
-          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to reset password.");
-      }
+    // Initiates the process of resetting a forgotten password
+    @PostMapping("/forgot-password")
+    public ResponseEntity<String> initiateForgotPassword(@RequestBody ForgotPasswordRequest request) {
+        try {
+            emailService.initiateForgotPassword(request.getEmail());
+            return ResponseEntity.ok("Reset link sent successfully.");
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found for email: " + request.getEmail());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
+        }
     }
 
+    // Verifies a user-entered code for a forgotten password
+    @GetMapping("/verify-forgot-code")
+    public ResponseEntity<String> verifyForgotCode(
+            @RequestParam("email") String email,
+            @RequestParam("code") String code) {
+        if (emailService.isForgotCodeValid(email, code)) {
+            return ResponseEntity.ok("Code is valid.");
+        } else {
+            return ResponseEntity.badRequest().body("Invalid Code.");
+        }
+    }
+
+    // Resets the password for a user
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordRequest request) {
+        try {
+            emailService.resetPassword(request.getEmail(), request.getCode(), request.getNewPassword());
+            String hashedPassword = passwordEncoder.encode(request.getNewPassword());
+            emailService.updatePassword(request.getEmail(), hashedPassword);
+            return ResponseEntity.ok("Password reset successfully.");
+        } catch (Exception e) {
+            // Log the exception
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to reset password.");
+        }
+    }
+
+    // Resends the verification code for a forgotten password
     @PostMapping("/resendForgotCode")
     public ResponseEntity<String> resendForgotCode(@RequestParam("email") String email) {
         try {
