@@ -162,11 +162,36 @@ public ResponseEntity<String> initiateForgotPassword(@RequestBody ForgotPassword
 
   @PostMapping("/reset-password")
   public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordRequest request) {
-      emailService.resetPassword(request.getEmail(), request.getCode(), request.getNewPassword());
-      String hashedPassword = passwordEncoder.encode(request.getNewPassword());
-      emailService.updatePassword(request.getEmail(), hashedPassword);
-      return ResponseEntity.ok("Password reset successfully.");
-  }
-  
-  
+      try {
+          emailService.resetPassword(request.getEmail(), request.getCode(), request.getNewPassword());
+          String hashedPassword = passwordEncoder.encode(request.getNewPassword());
+          emailService.updatePassword(request.getEmail(), hashedPassword);
+          return ResponseEntity.ok("Password reset successfully.");
+      } catch (Exception e) {
+          // Log the exception
+          e.printStackTrace();
+          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to reset password.");
+      }
+    }
+
+    @PostMapping("/resendForgotCode")
+    public ResponseEntity<String> resendForgotCode(@RequestParam("email") String email) {
+        try {
+            // Resend the forgot code
+            String newForgotCode = emailService.resendForgotCode(email);
+
+            // Send email with the new forgot code
+            EmailDetails emailDetails = new EmailDetails();
+            emailDetails.setRecipient(email);
+            emailDetails.setSubject("New Forgot Code");
+            emailDetails.setContent("Your new forgot code is: " + newForgotCode);
+            emailService.sendSimpleMail(emailDetails);
+
+            return ResponseEntity.ok("Forgot code resent successfully");
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found for email: " + email);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to resend forgot code");
+        }
+    }
 }
