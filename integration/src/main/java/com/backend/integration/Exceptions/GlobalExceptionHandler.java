@@ -10,46 +10,51 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+// Global exception handler to handle various types of exceptions in the application
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-  @ExceptionHandler(Exception.class)
-  public final ResponseEntity<Map<String, List<String>>> handleGeneralExceptions(Exception ex) {
-    List<String> errors = List.of(ex.getMessage());
 
-    return ResponseEntity
-        .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .body(errorsMap(errors));
-  }
+    // Handle general exceptions
+    @ExceptionHandler(Exception.class)
+    public final ResponseEntity<Map<String, List<String>>> handleGeneralExceptions(Exception ex) {
+        List<String> errors = List.of(ex.getMessage());
 
-  @ExceptionHandler(RuntimeException.class)
-  public final ResponseEntity<Map<String, List<String>>> handleRuntimeExceptions(RuntimeException ex) {
-    List<String> errors = List.of(ex.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(errorsMap(errors));
+    }
 
-    return ResponseEntity
-        .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .body(errorsMap(errors));
-  }
+    // Handle runtime exceptions
+    @ExceptionHandler(RuntimeException.class)
+    public final ResponseEntity<Map<String, List<String>>> handleRuntimeExceptions(RuntimeException ex) {
+        List<String> errors = List.of(ex.getMessage());
 
-  @ExceptionHandler(InvalidJwtException.class)
-  public ResponseEntity<Map<String, List<String>>> handleJwtErrors(InvalidJwtException ex) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(errorsMap(errors));
+    }
 
-    List<String> errors = List.of(ex.getMessage());
+    // Handle invalid JWT exceptions
+    @ExceptionHandler(InvalidJwtException.class)
+    public ResponseEntity<Map<String, List<String>>> handleJwtErrors(InvalidJwtException ex) {
+        List<String> errors = List.of(ex.getMessage());
 
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorsMap(errors));
-  }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorsMap(errors));
+    }
 
-  @ExceptionHandler(BadCredentialsException.class)
-  public ResponseEntity<Map<String, List<String>>> handleBadCredentialsError(BadCredentialsException ex) {
+    // Handle bad credentials exceptions
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<Map<String, List<String>>> handleBadCredentialsError(BadCredentialsException ex) {
+        List<String> errors = List.of(ex.getMessage());
 
-    List<String> errors = List.of(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorsMap(errors));
+    }
 
-    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorsMap(errors));
-  }
-
-  private Map<String, List<String>> errorsMap(List<String> errors) {
-    Map<String, List<String>> errorResponse = new HashMap<>();
-    errorResponse.put("errors", errors);
-    return errorResponse;
-  }
+    // Utility method to create a standardized map for errors
+    private Map<String, List<String>> errorsMap(List<String> errors) {
+        Map<String, List<String>> errorResponse = new HashMap<>();
+        errorResponse.put("errors", errors);
+        return errorResponse;
+    }
 
 }

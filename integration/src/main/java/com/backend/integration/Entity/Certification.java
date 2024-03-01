@@ -37,7 +37,7 @@ public class Certification {
 
   // Many-to-One relationship with QuizTaken entity
   @ManyToOne
-  @JoinColumn(name = "fscore_id")
+  @JoinColumn(name = "fscoreId")
   private FinalScore finalScore;
 
   // Getter and Setter methods for certificateID

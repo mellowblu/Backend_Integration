@@ -33,6 +33,8 @@ public class ForgotCodeEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
+    // Constructors
+
     public ForgotCodeEntity() {
         // Default constructor
     }
@@ -46,39 +48,48 @@ public class ForgotCodeEntity {
 
     // Getters and setters
 
+    // Getter for id
     public Long getId() {
         return id;
     }
 
+    // Setter for id
     public void setId(Long id) {
         this.id = id;
     }
 
+    // Getter for forgotCode
     public String getForgotCode() {
         return forgotCode;
     }
 
+    // Setter for forgotCode
     public void setForgotCode(String forgotCode) {
         this.forgotCode = forgotCode;
     }
 
+    // Getter for forgotExpirationTimeInMillis
     public long getForgotExpirationTimeInMillis() {
         return forgotExpirationTimeInMillis;
     }
 
+    // Setter for forgotExpirationTimeInMillis
     public void setForgotExpirationTimeInMillis(long forgotExpirationTimeInMillis) {
         this.forgotExpirationTimeInMillis = forgotExpirationTimeInMillis;
         this.forgotExpirationTime = Instant.ofEpochMilli(forgotExpirationTimeInMillis);
     }
 
+    // Getter for user
     public User getUser() {
         return user;
     }
 
+    // Setter for user
     public void setUser(User user) {
         this.user = user;
     }
 
+    // Getter for forgotExpirationTime
     public Instant getForgotExpirationTime() {
         return forgotExpirationTime;
     }

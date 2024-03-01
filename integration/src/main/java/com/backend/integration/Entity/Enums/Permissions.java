@@ -11,10 +11,12 @@ public enum Permissions {
 
     private final String permission;
 
+    // Constructor with parameter
     private Permissions(String permission) {
         this.permission = permission;
     }
 
+    // Getter for permission
     public String getPermission() {
         return permission;
     }    

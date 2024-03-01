@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.backend.integration.Entity.Certification;
+import com.backend.integration.Entity.FinalScore;
 
 public interface CertificationRepository extends JpaRepository<Certification, Long>{
      // Method to retrieve all certifications
@@ -25,4 +26,8 @@ public interface CertificationRepository extends JpaRepository<Certification, Lo
     // Custom query to retrieve certifications based on user ID
   @Query("SELECT cr FROM Certification cr WHERE cr.finalScore.enrollment.user_id.user_id = :user_id")
   List<Certification> findByUserId(@Param("user_id") Long user_id);
+
+  // boolean existsByFinalScore_FscoreId(Long fscore_id);
+  // boolean existsByFinalScoreFscoreId(Long fscore_id);
+
 }
