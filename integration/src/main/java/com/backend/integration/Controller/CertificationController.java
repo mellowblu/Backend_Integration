@@ -15,6 +15,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/v1/auth")
+@CrossOrigin("http://localhost:5173")
 public class CertificationController {
   @Autowired
   private CertificationService certificationService;
@@ -77,7 +79,7 @@ public class CertificationController {
         ? originalFilename.substring(3)
         : originalFilename;
       Path path = Paths.get(
-        "C:\\Users\\allad\\Documents\\Project\\OfficeProject\\Main Code\\cmsproject_v.2\\public\\PDF\\" +
+        "C:\\Users\\vsbu\\Documents\\V2_mergefles\\Main_Repository\\public\\PDF\\" +
         filenameWithoutPrefix
       );
       Files.write(path, bytes);
