@@ -68,7 +68,7 @@ public class AuthService implements UserDetailsService {
         try {
             // Check if the account is locked
             if (!user.isAccountNonLocked()) {
-                throw new AccountLockedException("Account is locked. Try again after 30 minutes.");
+                throw new AccountLockedException("Account is locked. Try again after 1 minutes.");
             }
 
             // Check if the entered password matches the stored password
@@ -96,7 +96,7 @@ public class AuthService implements UserDetailsService {
 
         // Lock the account if failed login attempts exceed a threshold
         if (user.getFailedLoginAttempts() >= 3) {
-            user.setAccountLockedUntil(LocalDateTime.now().plusMinutes(30));
+            user.setAccountLockedUntil(LocalDateTime.now().plusMinutes(1));
         }
 
         // Save the updated user entity to the database
