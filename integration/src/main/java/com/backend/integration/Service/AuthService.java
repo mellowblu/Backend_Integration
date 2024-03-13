@@ -46,7 +46,8 @@ public class AuthService implements UserDetailsService {
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
 
         // Create a new user entity
-        User newUser = new User(data.email(), data.userName(), encryptedPassword, data.firstName(), data.lastName(), data.phoneNumber(), data.role());
+        User newUser = new User(data.email(), data.userName(), encryptedPassword, data.firstName(), data.lastName(),
+                data.phoneNumber(), data.role());
 
         // Save the new user entity to the database
         userRepo.save(newUser);
@@ -95,7 +96,7 @@ public class AuthService implements UserDetailsService {
         user.setLastFailedLogin(LocalDateTime.now());
 
         // Lock the account if failed login attempts exceed a threshold
-        if (user.getFailedLoginAttempts() >= 3) {
+        if (user.getFailedLoginAttempts() > 5) {
             user.setAccountLockedUntil(LocalDateTime.now().plusMinutes(1));
         }
 
