@@ -128,7 +128,8 @@ public class AuthController {
                         user.getFirstName(),
                         user.getLastName(),
                         user.getEmail(),
-                        user.getPhoneNumber()
+                        user.getPhoneNumber(),
+                        user.getRole()
                 );
 
                 return ResponseEntity.ok(jwtDto);
